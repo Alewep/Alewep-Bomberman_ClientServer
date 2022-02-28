@@ -6,8 +6,8 @@ public class MainClient {
 
 	public static void main(String[] args) {
 		
-		try {
-			Socket socket = new Socket("localhost",5000);
+		try (Socket socket = new Socket("localhost",5000)) {
+			
 			ClientReceiver receiver = new ClientReceiver(socket);
 			receiver.start();
 			

@@ -23,9 +23,8 @@ public class ClientReceiver extends Thread {
 	public void run () {
 		
 		
-		ObjectInputStream in;
-		try {
-			in = new ObjectInputStream(socket.getInputStream());
+		
+		try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream()) ){
 			BombermanGame model = (BombermanGame) in.readObject();
 			if (model != null) {
 				view = new ViewBombermanGame(model);
@@ -38,12 +37,21 @@ public class ClientReceiver extends Thread {
 					model = (BombermanGame) in.readObject();
 					
 				}
+				socket.close();
 			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+		}
+		finally {
+			try {
+				socket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 			
 		
