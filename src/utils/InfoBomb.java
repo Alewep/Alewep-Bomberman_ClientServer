@@ -1,7 +1,8 @@
 package utils;
 
+import java.io.Serializable;
 
-public class InfoBomb {
+public class InfoBomb implements Serializable {
 	
 	private int x;
 	private int y;

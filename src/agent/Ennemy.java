@@ -2,12 +2,14 @@ package agent;
 
 import agentStrategie.RandomStrategy;
 import model.BombermanGame;
+import parameters.ParametersVelocity;
+import utils.AgentAction;
 
 public class Ennemy extends Agent {
 
-	/**
-	 * 
-	 */
+	private int velocity = 15;
+	
+	
 	private static final long serialVersionUID = -3467050285899246741L;
 
 	public Ennemy(int x, int y,BombermanGame game) {
@@ -44,6 +46,17 @@ public class Ennemy extends Agent {
 	public boolean isEnnemy() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+	
+	public AgentAction executeAction() {
+		if (velocity  <= 0) {
+			velocity = ParametersVelocity.ennemy;
+			return strategy.executeAction();
+		}
+		else {
+			--velocity;
+			return AgentAction.STOP;
+		}
 	}
 
 

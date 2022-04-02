@@ -29,6 +29,7 @@ public class ServerReceiver extends Thread {
 	
 	public void run() {
 		
+		model.lauch();
 		
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));

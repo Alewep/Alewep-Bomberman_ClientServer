@@ -7,13 +7,14 @@ import agentStrategie.StrategyAgent;
 import utils.AgentAction;
 import utils.ColorAgent;
 
-public abstract class Agent implements Serializable {
+public abstract class Agent {
 	private static final long serialVersionUID = -3796514410810327233L;
 	private int x;
 	private int y;
 	private int invincible;
 	private int sick;
 	private AgentAction predAction;
+	private boolean stoped = true;
 	protected StrategyAgent strategy;
 	
 	public Agent(int x, int y) {
@@ -65,10 +66,21 @@ public abstract class Agent implements Serializable {
 		if(invincible > 0) {
 			--invincible;
 		}
-		predAction = strategy.executeAction();
-		return predAction;
+		AgentAction exec = strategy.executeAction();
+		if( exec != AgentAction.STOP) {
+			predAction = exec;
+			stoped = false;
+		} else {
+			stoped = true;
+		}
+		return exec;
 	}
 	
+	public boolean isStoped() {
+		return stoped;
+	}
+
+
 	public int getSick() {
 		return sick;
 	}

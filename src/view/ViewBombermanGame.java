@@ -22,14 +22,11 @@ import utils.StateBomb;
 
 public class ViewBombermanGame implements Observer {
 	
-	BombermanGame bombermanGame;
-	PanelBomberman panelBomberman;
-	JFrame frame;
+	BombermanGame bombermanGame = null;
+	PanelBomberman panelBomberman = null;
+	JFrame frame = null;
 	
-	public ViewBombermanGame(BombermanGame bombermanGame) {
-		this.bombermanGame = bombermanGame;
-		initPanel();
-		bombermanGame.addObserver(this);
+	private void createFrame() {
 		
 		this.frame = new JFrame();
 		frame.setTitle("Game");
@@ -42,6 +39,27 @@ public class ViewBombermanGame implements Observer {
 		frame.setLocation(dx, dy);
 		frame.setContentPane(panelBomberman);
 		frame.setVisible(true);
+		
+	}
+	public ViewBombermanGame(BombermanGame bombermanGame) {
+		this(bombermanGame,true);
+	}
+	
+	public ViewBombermanGame(BombermanGame bombermanGame, boolean createFrame) {
+		this.bombermanGame = bombermanGame;
+		initPanel();
+		bombermanGame.addObserver(this);
+		
+		if (createFrame) {
+			createFrame();
+		}
+		
+	}
+	
+	
+	public ViewBombermanGame(PanelBomberman panelBomberman) {
+		this.panelBomberman = panelBomberman;
+		createFrame();
 	}
 	
 	
@@ -50,13 +68,7 @@ public class ViewBombermanGame implements Observer {
 	}
 
 
-	public void updateByModel(BombermanGame bombermanGame) {
-		
-		this.bombermanGame = bombermanGame;
-		this.panelBomberman.cpt = this.bombermanGame.getTurn();
-		this.update();
-		
-	}
+	
 
 
 	public void setFrame(JFrame frame) {
@@ -103,10 +115,25 @@ public class ViewBombermanGame implements Observer {
 		panelBomberman.updateInfoGame(bombermanGame.getBreakable_walls(), agents,items, bombs);
 		panelBomberman.updateUI();
 	}
-
+	
+	public void updateUI(PanelBomberman panelBomberman) {
+		this.panelBomberman.updateInfoGame(
+				panelBomberman.getBreakable_walls(),
+				panelBomberman.getListInfoAgents(),
+				panelBomberman.getListInfoItems(),
+				panelBomberman.getListInfoBombs()
+		);
+	
+		this.panelBomberman.updateUI();
+		
+	}
 
 	public PanelBomberman getPanelBomberman() {
 		return panelBomberman;
+	}
+
+	public void setPanelBomberman(PanelBomberman panelBomberman) {
+		this.panelBomberman = panelBomberman;
 	}
 
 

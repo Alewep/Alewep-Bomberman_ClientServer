@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 
 import model.BombermanGame;
-
+import view.PanelBomberman;
 import view.ViewBombermanGame;
 
 public class ClientReceiver extends Thread {
@@ -25,18 +25,19 @@ public class ClientReceiver extends Thread {
 		
 		
 		try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream()) ){
-			BombermanGame model = (BombermanGame) in.readObject();
-			if (model != null) {
-				view = new ViewBombermanGame(model);
+			PanelBomberman panel = (PanelBomberman) in.readObject();
+			if (panel != null) {
+				view = new ViewBombermanGame(panel);
 				this.sender = new ClientSender(socket);
 				view.getFrame().addKeyListener(this.sender);
-				while (model != null) {
+				while (panel != null) {
 				
-					view.updateByModel(model);
+					view.updateUI(panel);
 					
-					model = (BombermanGame) in.readObject();
+					panel = (PanelBomberman) in.readObject();
 					
 				}
+				System.out.println("fermeture");
 				socket.close();
 			}
 			

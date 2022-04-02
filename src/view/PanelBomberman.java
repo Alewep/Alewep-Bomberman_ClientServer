@@ -9,10 +9,13 @@ import java.awt.image.RescaleOp;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
+
 import javax.imageio.ImageIO;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
+import parameters.ParametersVelocity;
 import utils.*;
 
 
@@ -22,12 +25,13 @@ import utils.*;
  */
 
 
-public class PanelBomberman extends JPanel{
+public class PanelBomberman extends JPanel implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	protected Color wallColor=Color.GRAY;
 	protected Color brokable_walls_Color=Color.lightGray;
 	protected Color ground_Color= new Color(50,175,50);
+	
 
 	
 
@@ -183,9 +187,9 @@ public class PanelBomberman extends JPanel{
 		
 		try {
 			if(infoAgent.getType() == 'R') {
-				img = ImageIO.read(new File("./images/" + infoAgent.getType() + direction + this.cpt % 2 + ".png"));	
+				img = ImageIO.read(new File("./images/" + infoAgent.getType() + direction + (this.cpt / ParametersVelocity.view)% 2  + ".png"));	
 			}else {
-				img = ImageIO.read(new File("./images/" + infoAgent.getType() + direction + this.cpt % 3 + ".png"));
+				img = ImageIO.read(new File("./images/" + infoAgent.getType() + direction + (this.cpt/ ParametersVelocity.view) % 3 + ".png"));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -472,6 +476,22 @@ public class PanelBomberman extends JPanel{
 	}
 
 
+
+	public ArrayList<InfoAgent> getListInfoAgents() {
+		return listInfoAgents;
+	}
+
+	public ArrayList<InfoItem> getListInfoItems() {
+		return listInfoItems;
+	}
+
+	public ArrayList<InfoBomb> getListInfoBombs() {
+		return listInfoBombs;
+	}
+
+	public boolean[][] getBreakable_walls() {
+		return breakable_walls;
+	}
 
 	public int getSizeX() {
 		return sizeX;

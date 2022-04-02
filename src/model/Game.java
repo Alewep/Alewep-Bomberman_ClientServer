@@ -5,7 +5,7 @@ import java.util.Vector;
 import observer.Observable;
 import observer.Observer;
 
-public abstract class Game implements Runnable, Observable,Serializable {
+public abstract class Game implements Runnable, Observable {
 	
 	private static final long serialVersionUID = 7141325611942256230L;
 	

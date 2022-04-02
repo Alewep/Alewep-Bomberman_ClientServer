@@ -10,9 +10,13 @@ public class MainClient {
 			
 			ClientReceiver receiver = new ClientReceiver(socket);
 			receiver.start();
+			receiver.join();
 			
 			
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

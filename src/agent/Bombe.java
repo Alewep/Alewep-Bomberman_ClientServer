@@ -2,13 +2,16 @@ package agent;
 
 import java.io.Serializable;
 
+import parameters.ParametersVelocity;
 import utils.StateBomb;
 
-public class Bombe implements Serializable{
+public class Bombe {
 
 	private static final long serialVersionUID = -896103582685580136L;
 	private int x,y,range;
 	private int state;
+	private int velocity;
+	
 	
 	public Bombe(int x,int y,int range) {
 		this.x = x;
@@ -26,10 +29,18 @@ public class Bombe implements Serializable{
 	}
 	
 	public void next() {
-		++ state;
+		if (velocity <= 0 ) {
+			++ state;
+			velocity = ParametersVelocity.bomb;
+		}
+		else {
+			--velocity;
+		}
 	}
 	
+
 	public StateBomb getStateBomb() {
+
 		StateBomb[] temp = StateBomb.values();
 		if (state < temp.length)
 			return StateBomb.values()[state];

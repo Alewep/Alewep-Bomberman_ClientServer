@@ -2,13 +2,15 @@ package item;
 
 public class RandomFactoryItem {
 	private static final double probabilityItem = 0.2;
+	
 	public static Item create(int x,int y) {
 		if (Math.random() <= probabilityItem) {
-			if(Math.random() <= 1)  
+			double rand = Math.random();
+			if( rand <= 0.2)  
 				return new Skull(x,y);
-			if(Math.random() <= 0.35)  
+			if( rand <= 0.5)  
 				return new FireSuit(x,y);
-			if(Math.random() <= 0.60)  
+			if( rand  <= 0.8)  
 					return new FireUp(x,y);
 			return new FireDown(x,y);
 		}

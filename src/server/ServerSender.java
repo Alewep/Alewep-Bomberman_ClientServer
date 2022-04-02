@@ -9,10 +9,12 @@ import agent.BomberMan;
 import agentStrategie.StrategyManuel;
 import model.BombermanGame;
 import utils.AgentAction;
+import utils.InfoAgent;
+import view.ViewBombermanGame;
 
 public class ServerSender extends Thread {
 	private static final long refresh_time = 10;
-	private BombermanGame model;
+	private ViewBombermanGame view;
 	private Socket socket;
 	
 	
@@ -21,7 +23,7 @@ public class ServerSender extends Thread {
 	
 	public ServerSender(BombermanGame model, Socket socket) {
 		super();
-		this.model = model;
+		this.view = new ViewBombermanGame(model,false);
 		this.socket = socket;
 	}
 
@@ -38,7 +40,7 @@ public class ServerSender extends Thread {
 				while (true) {
 					//out.println(model.serialize());
 					
-					out.writeObject(model);
+					out.writeObject(view.getPanelBomberman());
 					out.reset();
 					
 					sleep(refresh_time);

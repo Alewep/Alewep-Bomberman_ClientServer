@@ -8,7 +8,7 @@ public class Test {
 //		SimpleGame game = new SimpleGame(10,1000);
 //		ControllerSimpleGame controller = new ControllerSimpleGame(game);
 		
-		BombermanGame game = new BombermanGame(40000,1000,"alone.lay");
+		BombermanGame game = new BombermanGame(40000,1000,"exemple.lay");
 		ControllerBombermanGame controller = new ControllerBombermanGame(game);
 		
 		
