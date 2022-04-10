@@ -2,6 +2,7 @@ package client;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import model.BombermanGame;
@@ -9,13 +10,16 @@ import view.PanelBomberman;
 import view.ViewBombermanGame;
 
 public class ClientReceiver extends Thread {
-	private Socket socket;
+	
 	private ClientSender sender;
 	private ViewBombermanGame view;
-	
-	public ClientReceiver(Socket socket) {
+	ObjectInputStream in;
+	ObjectOutputStream out;
+	public ClientReceiver(ObjectInputStream in,ObjectOutputStream out) {
 		super();
-		this.socket = socket;
+		this.in = in;
+		this.out = out;
+		
 		
 	}
 	
@@ -24,21 +28,21 @@ public class ClientReceiver extends Thread {
 		
 		
 		
-		try (ObjectInputStream in = new ObjectInputStream(socket.getInputStream()) ){
+		try {
 			PanelBomberman panel = (PanelBomberman) in.readObject();
 			if (panel != null) {
 				view = new ViewBombermanGame(panel);
-				this.sender = new ClientSender(socket);
+				this.sender = new ClientSender(out);
 				view.getFrame().addKeyListener(this.sender);
 				while (panel != null) {
-				
+					
 					view.updateUI(panel);
 					
 					panel = (PanelBomberman) in.readObject();
 					
 				}
-				System.out.println("fermeture");
-				socket.close();
+				
+				
 			}
 			
 		} catch (IOException e) {
@@ -48,7 +52,10 @@ public class ClientReceiver extends Thread {
 		}
 		finally {
 			try {
-				socket.close();
+				if(out!=null)
+					out.close();
+				if(out!=null)
+					in.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -41,6 +41,8 @@ public class ViewBombermanGame implements Observer {
 		frame.setVisible(true);
 		
 	}
+	
+	
 	public ViewBombermanGame(BombermanGame bombermanGame) {
 		this(bombermanGame,true);
 	}

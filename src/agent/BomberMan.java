@@ -1,6 +1,7 @@
 package agent;
 
 import agentStrategie.RandomStrategy;
+import agentStrategie.StrategyManuel;
 import model.BombermanGame;
 import utils.ColorAgent;
 
@@ -13,7 +14,7 @@ public class BomberMan extends Agent{
 	public BomberMan(int x, int y, ColorAgent color,BombermanGame game) {
 		super(x, y);
 		this.color = color;
-		this.strategy = new RandomStrategy();
+		this.strategy = new StrategyManuel();
 	}
 
 	@Override

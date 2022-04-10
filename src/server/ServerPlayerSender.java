@@ -12,19 +12,23 @@ import utils.AgentAction;
 import utils.InfoAgent;
 import view.ViewBombermanGame;
 
-public class ServerSender extends Thread {
+public class ServerPlayerSender extends Thread {
 	private static final long refresh_time = 10;
 	private ViewBombermanGame view;
-	private Socket socket;
+	private ObjectOutputStream out;
+	private Player player;
 	
 	
 	
 	
 	
-	public ServerSender(BombermanGame model, Socket socket) {
+	
+	public ServerPlayerSender(BombermanGame model, ObjectOutputStream out,Player player) {
 		super();
 		this.view = new ViewBombermanGame(model,false);
-		this.socket = socket;
+		this.out = out;
+		this.player = player;
+	
 	}
 
 
@@ -35,11 +39,11 @@ public class ServerSender extends Thread {
 			
 			try {
 			        
-				ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-				//PrintWriter out = new PrintWriter(socket.getOutputStream());
+				
+				
 				while (true) {
-					//out.println(model.serialize());
 					
+					//System.out.println(view.getBombermanGame().getBombermen().get(0).getX());
 					out.writeObject(view.getPanelBomberman());
 					out.reset();
 					
@@ -49,6 +53,17 @@ public class ServerSender extends Thread {
 			} catch (IOException | InterruptedException e1) {
 				
 				e1.printStackTrace();
+			}
+			finally {
+				player.removeInGame();
+				
+				try {
+					if(out!=null)
+						out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
 			}
 		
 		

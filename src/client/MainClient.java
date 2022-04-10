@@ -1,24 +1,16 @@
 package client;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+
+import view.InstanceView;
 
 public class MainClient {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		
-		try (Socket socket = new Socket("localhost",5000)) {
-			
-			ClientReceiver receiver = new ClientReceiver(socket);
-			receiver.start();
-			receiver.join();
-			
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		new ControllerInstance();
 
 	}
 

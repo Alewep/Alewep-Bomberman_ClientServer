@@ -1,6 +1,8 @@
 package server;
 
+import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import model.BombermanGame;
@@ -13,15 +15,50 @@ public class Issuer {
 	
 	public Issuer() {
 		
-		while (true) {
+		
 			
-			ServerSocket serveurSocket = new ServerSocket(5000);
-			BombermanGame model = new BombermanGame(400000,ParametersVelocity.game,"niveau1.lay");
-			Player player = new Player(serveurSocket,model,0);
+			try(ServerSocket serveurSocket = new ServerSocket(5000)) {
+				
+				while(true) {
+				
+					Socket socket = serveurSocket.accept();
+					IssuerDialog dialog = new IssuerDialog(socket,this);
+					dialog.start();
+					
+				}
+				
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			
+			
+	}
+	
+	public synchronized Game getGameid(long id) {
+		for (Game g : games) {
+			if (g.getId() == id) {
+				return g;
+			}
 		}
+		return null;
 		
 	}
+	
+	public synchronized void addGame(Game game) {
+		games.add(game);
+		
+	}
+	public synchronized void removeGame(Game game) {
+		games.remove(game);
+		
+	}
+
+
+	
+		
+	
 
 }

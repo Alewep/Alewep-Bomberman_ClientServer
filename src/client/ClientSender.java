@@ -3,6 +3,7 @@ package client;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -13,16 +14,13 @@ import view.ViewBombermanGame;
 public class ClientSender extends Thread implements KeyListener{
 	
     private static final String KW_ACTION = "action";
-    private PrintWriter out;
-    private Socket socket;
+    private ObjectOutputStream out;
 
-
-
-	public ClientSender(Socket socket) throws IOException {
+	public ClientSender(ObjectOutputStream out) throws IOException {
 		super();
-		this.socket = socket;
 		
-		this.out = new PrintWriter (socket.getOutputStream());
+		
+		this.out = out;
 		
 	}
 
@@ -56,8 +54,20 @@ public class ClientSender extends Thread implements KeyListener{
         }
         if (action != null ) {
             System.out.println(action);
-            out.println(KW_ACTION + " " +action);
-            out.flush();
+            try {
+				out.writeObject("action "+action);
+				out.reset();
+			} catch (IOException e) {
+				e.printStackTrace();
+				try {
+					if (out != null)
+						out.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+            
         }
 		
 	}

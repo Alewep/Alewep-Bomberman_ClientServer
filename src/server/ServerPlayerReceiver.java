@@ -10,18 +10,21 @@ import model.BombermanGame;
 import utils.AgentAction;
 
 
-public class ServerReceiver extends Thread {
+public class ServerPlayerReceiver extends Thread {
 
-	private Socket socket;
+	
 	private BombermanGame model;
 	private BomberMan bomberman;
 	private StrategyManuel strategy;
+	private ObjectInputStream in;
+	private Player player;
 
-	public ServerReceiver(Socket socket, BombermanGame model,int numBomberman) {
+	public ServerPlayerReceiver(ObjectInputStream in, BombermanGame model,Player player) {
 		super();
-		this.socket = socket;
+		this.in = in;
 		this.model = model;
-		this.bomberman = model.getBombermen().get(numBomberman);
+		this.player = player;
+		this.bomberman = model.getBombermen().get(player.getId());
 		this.strategy = new StrategyManuel();
 		this.bomberman.setStrategy(strategy);
 	}
@@ -29,15 +32,12 @@ public class ServerReceiver extends Thread {
 	
 	public void run() {
 		
-		model.lauch();
-		
 		try {
-			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			
-			String msg = in.readLine();
+			String msg = (String) in.readObject();
 			
 			while (msg != null) {
-				System.out.println("msg: " + msg);
+				
 				String[] msg_split = msg.split(" ");
 					
 				
@@ -47,7 +47,7 @@ public class ServerReceiver extends Thread {
 					try {
 						
 						AgentAction action = AgentAction.valueOf(msg_split[1].toUpperCase());
-						System.out.println("action:" + action);
+						//System.out.println("action:" + action);
 						strategy.setLast_action(action);
 					}
 					catch (Exception e) {
@@ -57,12 +57,22 @@ public class ServerReceiver extends Thread {
 				}
 	
 					
-				msg = in.readLine();
+				msg = (String) in.readObject();
 			}
 			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
+		} catch (IOException | ClassNotFoundException e) {
+			
 			e.printStackTrace();
+		}
+		finally {
+			player.removeInGame();
+			try {
+				if (in != null)
+					in.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		}
 		
 	}
